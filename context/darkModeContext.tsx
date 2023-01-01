@@ -1,8 +1,12 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
-const DarkModeContext = createContext(undefined);
+export interface DarkModeContextType {
+    isDarkMode: boolean;
+    changeDarkMode(value: boolean): void;
+}
+const DarkModeContext = createContext<DarkModeContextType| null>(null);
 
-export function DarkModeProvider( {children}) {
-    const {isDarkMode, setDarkMode} = useState(false);
+export function DarkModeProvider( {children}: { children: React.ReactNode}) {
+    const [isDarkMode, setDarkMode] = useState(false);
     function updateTheme() {
         const currentTheme = localStorage.getItem("isDarkMode") || "false";
         if (currentTheme === "true") {
@@ -10,28 +14,29 @@ export function DarkModeProvider( {children}) {
             setDarkMode(true);
         } else {
             document.body.classList.remove("dark");
-            // setDarkMode(false);
+            setDarkMode(false);
         }
     }
     useEffect(()=> {
         updateTheme();
     }, []);
-    function changeDarkMode(value) {
+    function changeDarkMode(value: boolean) {
         localStorage.setItem("isDarkMode", value.toString());
         updateTheme();
     }
+    const contextValue: DarkModeContextType = {
+        isDarkMode,
+        changeDarkMode,
+    }
 
     return (
-        <DarkModeContext.Provider value={{ isDarkMode, changeDarkMode}}>
+        <DarkModeContext.Provider value={contextValue}>
         {children}
         </DarkModeContext.Provider>
     );
 }
 
-export const useDarkMode = () => {
+export const useDarkMode = (): DarkModeContextType => {
     const context = useContext(DarkModeContext);
-    if (context === undefined) {
-        throw new Error ("useAuth can only be used inside AuthProvider");
-    }
-    return context;
+    return context!;
 };

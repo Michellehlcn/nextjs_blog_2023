@@ -1,4 +1,4 @@
-import "@styles/globals.css";
+import "../styles/globals.css";
 import { DarkModeProvider } from "../context/darkModeContext";
 import React from "react";
 import Layout from "../layout/Layout";

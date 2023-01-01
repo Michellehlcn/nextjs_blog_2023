@@ -17,7 +17,7 @@ import { FiMoon, FiSun } from "react-icons/fi";
 /* Top NavBar Component */
 export default function TopNavbar() {
     const router = useRouter();
-    const navRef = useRef(null);
+    const navRef = useRef<HTMLDivElement>(null);
 
     const control = useAnimation();
     const [navOpen, setNavOpen] = useState(false);
@@ -26,7 +26,7 @@ export default function TopNavbar() {
     // Adding shadow, backdrop to the navbar as user scroll the screen
     const addShadowToNavBar = useCallback(() => {
         if (window.pageXOffset >10) {
-            navRef.current.classList.add(
+            navRef.current!.classList.add(
                 ...[
                     "shadow",
                     "backdrop-blur-xl",
@@ -36,7 +36,7 @@ export default function TopNavbar() {
             );
             control.start("visible");
         } else {
-            navRef.current.classList.remove(
+            navRef.current!.classList.remove(
                 ...[
                     "shadow",
                     "backdrop-blur-xl",
@@ -92,7 +92,7 @@ export default function TopNavbar() {
                     animate={control}
                     variants={{
                         hidden: { opacity: 0, scale: 1, display: "none"},
-                        visible: { opcaity: 1, scale: 1, display: "inline-flex"},
+                        visible: { opacity: 1, scale: 1, display: "inline-flex"},
                     }}
                     className="absolute sm:hidden w-fit left-0 right-0 mx-auto flex justify-center text-base font-sarina"
                     >
